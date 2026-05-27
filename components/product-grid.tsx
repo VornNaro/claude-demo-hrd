@@ -6,8 +6,8 @@ import { Loader2 } from "lucide-react";
 
 import { ProductCard } from "@/components/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getProducts } from "@/lib/products";
-import type { Product } from "@/lib/types";
+import { getProducts, getProductsByCategory } from "@/lib/products";
+import type { Category, Product } from "@/lib/types";
 
 const PAGE_SIZE = 12;
 
@@ -24,8 +24,10 @@ function SkeletonCard() {
 
 export function ProductGrid({
   initialProducts,
+  category,
 }: {
   initialProducts: Product[];
+  category?: Category;
 }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   // The first page (0) is server-rendered, so we resume from page 1.
@@ -33,15 +35,23 @@ export function ProductGrid({
   const [loading, setLoading] = useState(false);
   const { ref, inView } = useInView({ rootMargin: "600px" });
 
+  // Reset when the category filter changes (new navigation).
+  useEffect(() => {
+    setProducts(initialProducts);
+    pageRef.current = 1;
+  }, [initialProducts, category]);
+
   const loadMore = useCallback(async () => {
     setLoading(true);
     // Tiny delay so the skeletons register as a real "loading more" beat.
     await new Promise((r) => setTimeout(r, 350));
-    const next = getProducts(pageRef.current, PAGE_SIZE);
+    const next = category
+      ? getProductsByCategory(category, pageRef.current, PAGE_SIZE)
+      : getProducts(pageRef.current, PAGE_SIZE);
     pageRef.current += 1;
     setProducts((prev) => [...prev, ...next]);
     setLoading(false);
-  }, []);
+  }, [category]);
 
   useEffect(() => {
     if (inView && !loading) {

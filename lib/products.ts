@@ -181,6 +181,24 @@ export function getProducts(page: number, pageSize = 12): Product[] {
   return Array.from({ length: pageSize }, (_, i) => generateProduct(start + i));
 }
 
+/**
+ * Returns one page of products from a single category. `page` is zero-based.
+ *
+ * Because the catalog rotates categories round-robin (index % CATEGORIES.length),
+ * the n-th product of category at slot `c` lives at global index `c + n * 8`.
+ */
+export function getProductsByCategory(
+  category: Category,
+  page: number,
+  pageSize = 12,
+): Product[] {
+  const catIndex = CATEGORIES.indexOf(category);
+  const start = page * pageSize;
+  return Array.from({ length: pageSize }, (_, i) =>
+    generateProduct(catIndex + (start + i) * CATEGORIES.length),
+  );
+}
+
 /** Rebuilds a single product from its id, or null if the id isn't valid. */
 export function getProductById(id: string): Product | null {
   const index = Number(id);
