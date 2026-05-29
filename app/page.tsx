@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { CategoryFilter } from "@/components/category-filter";
 import { ProductGrid } from "@/components/product-grid";
 import { getProducts, getProductsByCategory } from "@/lib/products";
-import { CATEGORIES, type Category } from "@/lib/types";
+import { isCategory } from "@/lib/types";
 
 export default async function HomePage({
   searchParams,
@@ -11,9 +11,7 @@ export default async function HomePage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category: rawCategory } = await searchParams;
-  const category = CATEGORIES.includes(rawCategory as Category)
-    ? (rawCategory as Category)
-    : undefined;
+  const category = isCategory(rawCategory) ? rawCategory : undefined;
 
   const initialProducts = category
     ? getProductsByCategory(category, 0, 12)
@@ -32,16 +30,23 @@ export default async function HomePage({
       </section>
 
       <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="text-xl font-semibold">
-          {category ? category : "All products"}
-        </h2>
+        <h2 className="text-xl font-semibold">{category ?? "All products"}</h2>
       </div>
 
       <Suspense>
         <CategoryFilter selected={category} />
       </Suspense>
 
-      <ProductGrid initialProducts={initialProducts} category={category} />
+      {/*
+       * Keying on category remounts the grid on filter change, so the
+       * pageRef/products state and any in-flight loadMore from the previous
+       * category are discarded by construction — no race, no manual reset.
+       */}
+      <ProductGrid
+        key={category ?? "all"}
+        initialProducts={initialProducts}
+        category={category}
+      />
     </div>
   );
 }

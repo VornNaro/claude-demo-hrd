@@ -35,11 +35,9 @@ export function ProductGrid({
   const [loading, setLoading] = useState(false);
   const { ref, inView } = useInView({ rootMargin: "600px" });
 
-  // Reset when the category filter changes (new navigation).
-  useEffect(() => {
-    setProducts(initialProducts);
-    pageRef.current = 1;
-  }, [initialProducts, category]);
+  // Note: this component is keyed by `category` in the parent, so a filter
+  // change remounts a fresh instance — no manual reset effect is needed, and
+  // any in-flight loadMore from the previous category dies with its instance.
 
   const loadMore = useCallback(async () => {
     setLoading(true);

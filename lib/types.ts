@@ -17,6 +17,14 @@ export const CATEGORIES = [
 
 export type Category = (typeof CATEGORIES)[number];
 
+/** Type guard: narrows an unknown URL/search-param value to a Category. */
+export function isCategory(value: unknown): value is Category {
+  return (
+    typeof value === "string" &&
+    (CATEGORIES as readonly string[]).includes(value)
+  );
+}
+
 export type Product = {
   id: string;
   name: string;
