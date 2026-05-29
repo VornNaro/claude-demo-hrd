@@ -21,7 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
+      # write so Claude can post review comments and inline PR comments;
+      # without it the action runs successfully but `No buffered inline
+      # comments` are ever posted (see PR #6 history for the silent run).
+      pull-requests: write
       issues: read
       id-token: write
 
