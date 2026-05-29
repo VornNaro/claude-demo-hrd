@@ -1,16 +1,16 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Headphones,
   Home,
   Laptop,
+  LayoutGrid,
   Monitor,
   Smartphone,
   Tablet,
   Tv,
   Watch,
-  LayoutGrid,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -28,8 +28,21 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Appliances: Home,
 };
 
+const PILL_BASE =
+  "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors";
+
+function pillClass(active: boolean): string {
+  return cn(
+    PILL_BASE,
+    active
+      ? "border-foreground bg-foreground text-background"
+      : "border-border bg-background text-muted-foreground hover:border-foreground/40 hover:text-foreground",
+  );
+}
+
 export function CategoryFilter({ selected }: { selected?: Category }) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   function navigate(category?: Category) {
@@ -39,19 +52,16 @@ export function CategoryFilter({ selected }: { selected?: Category }) {
     } else {
       params.delete("category");
     }
-    router.push(`/?${params.toString()}`);
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname);
   }
 
   return (
     <div className="mb-6 flex flex-wrap gap-2">
       <button
         onClick={() => navigate(undefined)}
-        className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
-          !selected
-            ? "border-foreground bg-foreground text-background"
-            : "border-border bg-background text-muted-foreground hover:border-foreground/40 hover:text-foreground",
-        )}
+        aria-pressed={!selected}
+        className={pillClass(!selected)}
       >
         <LayoutGrid className="size-3.5" />
         All
@@ -64,12 +74,8 @@ export function CategoryFilter({ selected }: { selected?: Category }) {
           <button
             key={category}
             onClick={() => navigate(category)}
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
-              active
-                ? "border-foreground bg-foreground text-background"
-                : "border-border bg-background text-muted-foreground hover:border-foreground/40 hover:text-foreground",
-            )}
+            aria-pressed={active}
+            className={pillClass(active)}
           >
             <Icon className="size-3.5" />
             {category}
