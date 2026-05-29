@@ -1,10 +1,23 @@
-import { ProductGrid } from "@/components/product-grid";
-import { getProducts } from "@/lib/products";
+import { Suspense } from "react";
 
-export default function HomePage() {
-  // First page is rendered on the server for a fast first paint; the grid
-  // takes over and streams in more as you scroll.
-  const initialProducts = getProducts(0, 12);
+import { CategoryFilter } from "@/components/category-filter";
+import { ProductGrid } from "@/components/product-grid";
+import { getProducts, getProductsByCategory } from "@/lib/products";
+import { CATEGORIES, type Category } from "@/lib/types";
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { category: rawCategory } = await searchParams;
+  const category = CATEGORIES.includes(rawCategory as Category)
+    ? (rawCategory as Category)
+    : undefined;
+
+  const initialProducts = category
+    ? getProductsByCategory(category, 0, 12)
+    : getProducts(0, 12);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -19,10 +32,16 @@ export default function HomePage() {
       </section>
 
       <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="text-xl font-semibold">All products</h2>
+        <h2 className="text-xl font-semibold">
+          {category ? category : "All products"}
+        </h2>
       </div>
 
-      <ProductGrid initialProducts={initialProducts} />
+      <Suspense>
+        <CategoryFilter selected={category} />
+      </Suspense>
+
+      <ProductGrid initialProducts={initialProducts} category={category} />
     </div>
   );
 }
