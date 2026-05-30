@@ -1,6 +1,50 @@
 import { faker } from "@faker-js/faker";
 import { CATEGORIES, type Category, type Product } from "./types";
 
+const CATEGORY_IMAGES: Record<Category, string[]> = {
+  Smartphones: [
+    "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1605457867610-e990b192e6a0?w=800&h=800&fit=crop&auto=format",
+  ],
+  Tablets: [
+    "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1632763188414-2e6ba8eb7dd2?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=800&h=800&fit=crop&auto=format",
+  ],
+  Watches: [
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&h=800&fit=crop&auto=format",
+  ],
+  Earbuds: [
+    "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop&auto=format",
+  ],
+  TVs: [
+    "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1567690187548-f07b1d7bf5a9?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&h=800&fit=crop&auto=format",
+  ],
+  Monitors: [
+    "https://images.unsplash.com/photo-1527443224154-c4a573d5f5a8?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=800&h=800&fit=crop&auto=format",
+  ],
+  Laptops: [
+    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop&auto=format",
+  ],
+  Appliances: [
+    "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=800&fit=crop&auto=format",
+  ],
+};
+
 /**
  * Endless, deterministic Samsung-style catalog.
  *
@@ -166,7 +210,7 @@ export function generateProduct(index: number): Product {
     name,
     category,
     price,
-    image: `https://picsum.photos/seed/samsung-${index}/800/800`,
+    image: CATEGORY_IMAGES[category][index % CATEGORY_IMAGES[category].length],
     rating: faker.number.float({ min: 3.8, max: 5, fractionDigits: 1 }),
     reviews: faker.number.int({ min: 12, max: 5400 }),
     colors: faker.helpers.arrayElements(COLORS, { min: 2, max: 4 }),
