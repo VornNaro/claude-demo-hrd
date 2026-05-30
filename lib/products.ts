@@ -6,11 +6,11 @@ const CATEGORY_IMAGES: Record<Category, string[]> = {
     "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&h=800&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=800&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1605457867610-e990b192e6a0?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1709744722656-9b850470293f?w=800&h=800&fit=crop&auto=format",
   ],
   Tablets: [
     "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1632763188414-2e6ba8eb7dd2?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1661595676335-aa93ecbf4b42?w=800&h=800&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=800&h=800&fit=crop&auto=format",
   ],
   Watches: [
@@ -29,9 +29,11 @@ const CATEGORY_IMAGES: Record<Category, string[]> = {
     "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&h=800&fit=crop&auto=format",
   ],
   Monitors: [
-    "https://images.unsplash.com/photo-1527443224154-c4a573d5f5a8?w=800&h=800&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=800&h=800&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=800&h=800&fit=crop&auto=format",
+    // Verified: actual desktop monitors (not iMacs or printers — the bot's
+    // original picks included a 404, an HP printer, and an Apple iMac).
+    "https://images.unsplash.com/photo-1551739440-5dd934d3a94a?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1547658718-1cdaa0852790?w=800&h=800&fit=crop&auto=format",
   ],
   Laptops: [
     "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&auto=format",
@@ -39,9 +41,13 @@ const CATEGORY_IMAGES: Record<Category, string[]> = {
     "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop&auto=format",
   ],
   Appliances: [
-    "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=800&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&h=800&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=800&fit=crop&auto=format",
+    // Verified: actual home appliances (washer, kitchen with stainless
+    // appliances, range+microwave). The bot's originals were a couple
+    // cooking, a living room, and a man holding a tool — none of which
+    // are appliances.
+    "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1596552183299-000ef779e88d?w=800&h=800&fit=crop&auto=format",
   ],
 };
 
