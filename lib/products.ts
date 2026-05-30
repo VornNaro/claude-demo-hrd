@@ -1,6 +1,56 @@
 import { faker } from "@faker-js/faker";
 import { CATEGORIES, type Category, type Product } from "./types";
 
+const CATEGORY_IMAGES: Record<Category, string[]> = {
+  Smartphones: [
+    "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1709744722656-9b850470293f?w=800&h=800&fit=crop&auto=format",
+  ],
+  Tablets: [
+    "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1661595676335-aa93ecbf4b42?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=800&h=800&fit=crop&auto=format",
+  ],
+  Watches: [
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&h=800&fit=crop&auto=format",
+  ],
+  Earbuds: [
+    "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop&auto=format",
+  ],
+  TVs: [
+    "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1567690187548-f07b1d7bf5a9?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&h=800&fit=crop&auto=format",
+  ],
+  Monitors: [
+    // Verified: actual desktop monitors (not iMacs or printers — the bot's
+    // original picks included a 404, an HP printer, and an Apple iMac).
+    "https://images.unsplash.com/photo-1551739440-5dd934d3a94a?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1547658718-1cdaa0852790?w=800&h=800&fit=crop&auto=format",
+  ],
+  Laptops: [
+    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop&auto=format",
+  ],
+  Appliances: [
+    // Verified: actual home appliances (washer, kitchen with stainless
+    // appliances, range+microwave). The bot's originals were a couple
+    // cooking, a living room, and a man holding a tool — none of which
+    // are appliances.
+    "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=800&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1596552183299-000ef779e88d?w=800&h=800&fit=crop&auto=format",
+  ],
+};
+
 /**
  * Endless, deterministic Samsung-style catalog.
  *
@@ -161,12 +211,20 @@ export function generateProduct(index: number): Product {
   const [min, max] = config.price;
   const price = faker.number.int({ min, max });
 
+  // Cycle the per-category images by category-LOCAL position, not the global
+  // index. Using the global index here means `index % images.length` only
+  // advances when gcd(CATEGORIES.length, images.length) === 1 — e.g. with
+  // 8 categories and a 4-image array, every product in that slot would get
+  // image[0]. Local position dodges the gcd trap regardless of array size.
+  const images = CATEGORY_IMAGES[category];
+  const localPos = Math.floor(index / CATEGORIES.length);
+
   return {
     id: String(index),
     name,
     category,
     price,
-    image: `https://picsum.photos/seed/samsung-${index}/800/800`,
+    image: images[localPos % images.length],
     rating: faker.number.float({ min: 3.8, max: 5, fractionDigits: 1 }),
     reviews: faker.number.int({ min: 12, max: 5400 }),
     colors: faker.helpers.arrayElements(COLORS, { min: 2, max: 4 }),
