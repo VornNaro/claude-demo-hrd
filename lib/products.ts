@@ -205,12 +205,20 @@ export function generateProduct(index: number): Product {
   const [min, max] = config.price;
   const price = faker.number.int({ min, max });
 
+  // Cycle the per-category images by category-LOCAL position, not the global
+  // index. Using the global index here means `index % images.length` only
+  // advances when gcd(CATEGORIES.length, images.length) === 1 — e.g. with
+  // 8 categories and a 4-image array, every product in that slot would get
+  // image[0]. Local position dodges the gcd trap regardless of array size.
+  const images = CATEGORY_IMAGES[category];
+  const localPos = Math.floor(index / CATEGORIES.length);
+
   return {
     id: String(index),
     name,
     category,
     price,
-    image: CATEGORY_IMAGES[category][index % CATEGORY_IMAGES[category].length],
+    image: images[localPos % images.length],
     rating: faker.number.float({ min: 3.8, max: 5, fractionDigits: 1 }),
     reviews: faker.number.int({ min: 12, max: 5400 }),
     colors: faker.helpers.arrayElements(COLORS, { min: 2, max: 4 }),
